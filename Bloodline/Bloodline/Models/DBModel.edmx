@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="bloodlineModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="branch">
+          <Key>
+            <PropertyRef Name="branchID" />
+          </Key>
+          <Property Name="branchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="branchName" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="camp">
+          <Key>
+            <PropertyRef Name="campID" />
+          </Key>
+          <Property Name="campID" Type="int" Nullable="false" />
+          <Property Name="campName" Type="varchar(max)" Nullable="false" />
+          <Property Name="campDate" Type="varchar(max)" Nullable="false" />
+          <Property Name="campLocation" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="donation">
+          <Key>
+            <PropertyRef Name="donationID" />
+          </Key>
+          <Property Name="donationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="donorID" Type="int" Nullable="false" />
+          <Property Name="donationDate" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="donor">
+          <Key>
+            <PropertyRef Name="donorID" />
+          </Key>
+          <Property Name="donorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="donorName" Type="varchar(max)" Nullable="false" />
+          <Property Name="donorDOB" Type="varchar(max)" Nullable="false" />
+          <Property Name="donorPhone" Type="varchar(max)" Nullable="false" />
+          <Property Name="donorGender" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="loginID" />
+          </Key>
+          <Property Name="loginID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar(max)" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
+          <Property Name="role" Type="varchar(max)" Nullable="false" />
+          <Property Name="roleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="receiver">
+          <Key>
+            <PropertyRef Name="receiverID" />
+          </Key>
+          <Property Name="receiverID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="receiverName" Type="varchar(max)" Nullable="false" />
+          <Property Name="receiverDOB" Type="varchar(max)" Nullable="false" />
+          <Property Name="receiverPhone" Type="varchar(max)" />
+          <Property Name="receiverGender" Type="varchar(max)" />
+          <Property Name="donorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="report">
+          <Key>
+            <PropertyRef Name="reportID" />
+          </Key>
+          <Property Name="reportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="donorID" Type="int" Nullable="false" />
+          <Property Name="bloodGroup" Type="varchar(max)" />
+          <Property Name="hmgLvl" Type="varchar(max)" />
+          <Property Name="bsLvl" Type="varchar(max)" />
+          <Property Name="rbc" Type="varchar(max)" />
+          <Property Name="wbc" Type="varchar(max)" />
+          <Property Name="reportDate" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="shipment">
+          <Key>
+            <PropertyRef Name="shipmentID" />
+          </Key>
+          <Property Name="shipmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="branchID" Type="int" Nullable="false" />
+          <Property Name="bloodAmount" Type="int" Nullable="false" />
+          <Property Name="shipDate" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="staffID" />
+          </Key>
+          <Property Name="staffID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staffName" Type="varchar(max)" Nullable="false" />
+          <Property Name="staffDOB" Type="varchar(max)" Nullable="false" />
+          <Property Name="staffPhone" Type="varchar(max)" />
+          <Property Name="staffGender" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="transaction">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="donorID" Type="int" Nullable="false" />
+          <Property Name="receiverID" Type="int" Nullable="false" />
+          <Property Name="transactionDate" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__donation__donorI__2739D489">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="donation" Type="Self.donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="donation">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__receiver__donorI__29221CFB">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="receiver" Type="Self.receiver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="receiver">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__report__donorID__2A164134">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="report" Type="Self.report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="report">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__shipment__branch__2B0A656D">
+          <End Role="branch" Type="Self.branch" Multiplicity="1" />
+          <End Role="shipment" Type="Self.shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="branch">
+              <PropertyRef Name="branchID" />
+            </Principal>
+            <Dependent Role="shipment">
+              <PropertyRef Name="branchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_transaction_donor">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="transaction" Type="Self.transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="transaction">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_transaction_receiver">
+          <End Role="receiver" Type="Self.receiver" Multiplicity="1" />
+          <End Role="transaction" Type="Self.transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="receiver">
+              <PropertyRef Name="receiverID" />
+            </Principal>
+            <Dependent Role="transaction">
+              <PropertyRef Name="receiverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bloodlineModelStoreContainer">
+          <EntitySet Name="branch" EntityType="Self.branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="camp" EntityType="Self.camp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="donation" EntityType="Self.donation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="donor" EntityType="Self.donor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="login" EntityType="Self.login" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="receiver" EntityType="Self.receiver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="report" EntityType="Self.report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="shipment" EntityType="Self.shipment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="staff" EntityType="Self.staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="transaction" EntityType="Self.transaction" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__donation__donorI__2739D489" Association="Self.FK__donation__donorI__2739D489">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="donation" EntitySet="donation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__receiver__donorI__29221CFB" Association="Self.FK__receiver__donorI__29221CFB">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="receiver" EntitySet="receiver" />
+          </AssociationSet>
+          <AssociationSet Name="FK__report__donorID__2A164134" Association="Self.FK__report__donorID__2A164134">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="report" EntitySet="report" />
+          </AssociationSet>
+          <AssociationSet Name="FK__shipment__branch__2B0A656D" Association="Self.FK__shipment__branch__2B0A656D">
+            <End Role="branch" EntitySet="branch" />
+            <End Role="shipment" EntitySet="shipment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_transaction_donor" Association="Self.FK_transaction_donor">
+            <End Role="donor" EntitySet="donor" />
+            <End Role="transaction" EntitySet="transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_transaction_receiver" Association="Self.FK_transaction_receiver">
+            <End Role="receiver" EntitySet="receiver" />
+            <End Role="transaction" EntitySet="transaction" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bloodlineModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="branch">
+          <Key>
+            <PropertyRef Name="branchID" />
+          </Key>
+          <Property Name="branchID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="branchName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="shipments" Relationship="Self.FK__shipment__branch__2B0A656D" FromRole="branch" ToRole="shipment" />
+        </EntityType>
+        <EntityType Name="camp">
+          <Key>
+            <PropertyRef Name="campID" />
+          </Key>
+          <Property Name="campID" Type="Int32" Nullable="false" />
+          <Property Name="campName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="campDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="campLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="donation">
+          <Key>
+            <PropertyRef Name="donationID" />
+          </Key>
+          <Property Name="donationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="donorID" Type="Int32" Nullable="false" />
+          <Property Name="donationDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__donation__donorI__2739D489" FromRole="donation" ToRole="donor" />
+        </EntityType>
+        <EntityType Name="donor">
+          <Key>
+            <PropertyRef Name="donorID" />
+          </Key>
+          <Property Name="donorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="donorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="donorDOB" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="donorPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="donorGender" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="donations" Relationship="Self.FK__donation__donorI__2739D489" FromRole="donor" ToRole="donation" />
+          <NavigationProperty Name="receivers" Relationship="Self.FK__receiver__donorI__29221CFB" FromRole="donor" ToRole="receiver" />
+          <NavigationProperty Name="reports" Relationship="Self.FK__report__donorID__2A164134" FromRole="donor" ToRole="report" />
+          <NavigationProperty Name="transactions" Relationship="Self.FK_transaction_donor" FromRole="donor" ToRole="transaction" />
+        </EntityType>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="loginID" />
+          </Key>
+          <Property Name="loginID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="roleID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="receiver">
+          <Key>
+            <PropertyRef Name="receiverID" />
+          </Key>
+          <Property Name="receiverID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="receiverName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="receiverDOB" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="receiverPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="receiverGender" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="donorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__receiver__donorI__29221CFB" FromRole="receiver" ToRole="donor" />
+          <NavigationProperty Name="transactions" Relationship="Self.FK_transaction_receiver" FromRole="receiver" ToRole="transaction" />
+        </EntityType>
+        <EntityType Name="report">
+          <Key>
+            <PropertyRef Name="reportID" />
+          </Key>
+          <Property Name="reportID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="donorID" Type="Int32" Nullable="false" />
+          <Property Name="bloodGroup" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="hmgLvl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="bsLvl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="rbc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="wbc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="reportDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK__report__donorID__2A164134" FromRole="report" ToRole="donor" />
+        </EntityType>
+        <EntityType Name="shipment">
+          <Key>
+            <PropertyRef Name="shipmentID" />
+          </Key>
+          <Property Name="shipmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="branchID" Type="Int32" Nullable="false" />
+          <Property Name="bloodAmount" Type="Int32" Nullable="false" />
+          <Property Name="shipDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="branch" Relationship="Self.FK__shipment__branch__2B0A656D" FromRole="shipment" ToRole="branch" />
+        </EntityType>
+        <EntityType Name="staff">
+          <Key>
+            <PropertyRef Name="staffID" />
+          </Key>
+          <Property Name="staffID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staffName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="staffDOB" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="staffPhone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="staffGender" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="transaction">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="donorID" Type="Int32" Nullable="false" />
+          <Property Name="receiverID" Type="Int32" Nullable="false" />
+          <Property Name="transactionDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="donor" Relationship="Self.FK_transaction_donor" FromRole="transaction" ToRole="donor" />
+          <NavigationProperty Name="receiver" Relationship="Self.FK_transaction_receiver" FromRole="transaction" ToRole="receiver" />
+        </EntityType>
+        <Association Name="FK__shipment__branch__2B0A656D">
+          <End Role="branch" Type="Self.branch" Multiplicity="1" />
+          <End Role="shipment" Type="Self.shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="branch">
+              <PropertyRef Name="branchID" />
+            </Principal>
+            <Dependent Role="shipment">
+              <PropertyRef Name="branchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__donation__donorI__2739D489">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="donation" Type="Self.donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="donation">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__receiver__donorI__29221CFB">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="receiver" Type="Self.receiver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="receiver">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__report__donorID__2A164134">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="report" Type="Self.report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="report">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_transaction_donor">
+          <End Role="donor" Type="Self.donor" Multiplicity="1" />
+          <End Role="transaction" Type="Self.transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donor">
+              <PropertyRef Name="donorID" />
+            </Principal>
+            <Dependent Role="transaction">
+              <PropertyRef Name="donorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_transaction_receiver">
+          <End Role="receiver" Type="Self.receiver" Multiplicity="1" />
+          <End Role="transaction" Type="Self.transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="receiver">
+              <PropertyRef Name="receiverID" />
+            </Principal>
+            <Dependent Role="transaction">
+              <PropertyRef Name="receiverID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="branches" EntityType="Self.branch" />
+          <EntitySet Name="camps" EntityType="Self.camp" />
+          <EntitySet Name="donations" EntityType="Self.donation" />
+          <EntitySet Name="donors" EntityType="Self.donor" />
+          <EntitySet Name="logins" EntityType="Self.login" />
+          <EntitySet Name="receivers" EntityType="Self.receiver" />
+          <EntitySet Name="reports" EntityType="Self.report" />
+          <EntitySet Name="shipments" EntityType="Self.shipment" />
+          <EntitySet Name="staffs" EntityType="Self.staff" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="transactions" EntityType="Self.transaction" />
+          <AssociationSet Name="FK__shipment__branch__2B0A656D" Association="Self.FK__shipment__branch__2B0A656D">
+            <End Role="branch" EntitySet="branches" />
+            <End Role="shipment" EntitySet="shipments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__donation__donorI__2739D489" Association="Self.FK__donation__donorI__2739D489">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="donation" EntitySet="donations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__receiver__donorI__29221CFB" Association="Self.FK__receiver__donorI__29221CFB">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="receiver" EntitySet="receivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__report__donorID__2A164134" Association="Self.FK__report__donorID__2A164134">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="report" EntitySet="reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_transaction_donor" Association="Self.FK_transaction_donor">
+            <End Role="donor" EntitySet="donors" />
+            <End Role="transaction" EntitySet="transactions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_transaction_receiver" Association="Self.FK_transaction_receiver">
+            <End Role="receiver" EntitySet="receivers" />
+            <End Role="transaction" EntitySet="transactions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bloodlineModelStoreContainer" CdmEntityContainer="DBModel">
+          <EntitySetMapping Name="branches">
+            <EntityTypeMapping TypeName="bloodlineModel.branch">
+              <MappingFragment StoreEntitySet="branch">
+                <ScalarProperty Name="branchID" ColumnName="branchID" />
+                <ScalarProperty Name="branchName" ColumnName="branchName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="camps">
+            <EntityTypeMapping TypeName="bloodlineModel.camp">
+              <MappingFragment StoreEntitySet="camp">
+                <ScalarProperty Name="campID" ColumnName="campID" />
+                <ScalarProperty Name="campName" ColumnName="campName" />
+                <ScalarProperty Name="campDate" ColumnName="campDate" />
+                <ScalarProperty Name="campLocation" ColumnName="campLocation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donations">
+            <EntityTypeMapping TypeName="bloodlineModel.donation">
+              <MappingFragment StoreEntitySet="donation">
+                <ScalarProperty Name="donationID" ColumnName="donationID" />
+                <ScalarProperty Name="donorID" ColumnName="donorID" />
+                <ScalarProperty Name="donationDate" ColumnName="donationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donors">
+            <EntityTypeMapping TypeName="bloodlineModel.donor">
+              <MappingFragment StoreEntitySet="donor">
+                <ScalarProperty Name="donorID" ColumnName="donorID" />
+                <ScalarProperty Name="donorName" ColumnName="donorName" />
+                <ScalarProperty Name="donorDOB" ColumnName="donorDOB" />
+                <ScalarProperty Name="donorPhone" ColumnName="donorPhone" />
+                <ScalarProperty Name="donorGender" ColumnName="donorGender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logins">
+            <EntityTypeMapping TypeName="bloodlineModel.login">
+              <MappingFragment StoreEntitySet="login">
+                <ScalarProperty Name="loginID" ColumnName="loginID" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="roleID" ColumnName="roleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="receivers">
+            <EntityTypeMapping TypeName="bloodlineModel.receiver">
+              <MappingFragment StoreEntitySet="receiver">
+                <ScalarProperty Name="receiverID" ColumnName="receiverID" />
+                <ScalarProperty Name="receiverName" ColumnName="receiverName" />
+                <ScalarProperty Name="receiverDOB" ColumnName="receiverDOB" />
+                <ScalarProperty Name="receiverPhone" ColumnName="receiverPhone" />
+                <ScalarProperty Name="receiverGender" ColumnName="receiverGender" />
+                <ScalarProperty Name="donorID" ColumnName="donorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reports">
+            <EntityTypeMapping TypeName="bloodlineModel.report">
+              <MappingFragment StoreEntitySet="report">
+                <ScalarProperty Name="reportID" ColumnName="reportID" />
+                <ScalarProperty Name="donorID" ColumnName="donorID" />
+                <ScalarProperty Name="bloodGroup" ColumnName="bloodGroup" />
+                <ScalarProperty Name="hmgLvl" ColumnName="hmgLvl" />
+                <ScalarProperty Name="bsLvl" ColumnName="bsLvl" />
+                <ScalarProperty Name="rbc" ColumnName="rbc" />
+                <ScalarProperty Name="wbc" ColumnName="wbc" />
+                <ScalarProperty Name="reportDate" ColumnName="reportDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shipments">
+            <EntityTypeMapping TypeName="bloodlineModel.shipment">
+              <MappingFragment StoreEntitySet="shipment">
+                <ScalarProperty Name="shipmentID" ColumnName="shipmentID" />
+                <ScalarProperty Name="branchID" ColumnName="branchID" />
+                <ScalarProperty Name="bloodAmount" ColumnName="bloodAmount" />
+                <ScalarProperty Name="shipDate" ColumnName="shipDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="staffs">
+            <EntityTypeMapping TypeName="bloodlineModel.staff">
+              <MappingFragment StoreEntitySet="staff">
+                <ScalarProperty Name="staffID" ColumnName="staffID" />
+                <ScalarProperty Name="staffName" ColumnName="staffName" />
+                <ScalarProperty Name="staffDOB" ColumnName="staffDOB" />
+                <ScalarProperty Name="staffPhone" ColumnName="staffPhone" />
+                <ScalarProperty Name="staffGender" ColumnName="staffGender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="bloodlineModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transactions">
+            <EntityTypeMapping TypeName="bloodlineModel.transaction">
+              <MappingFragment StoreEntitySet="transaction">
+                <ScalarProperty Name="transactionID" ColumnName="transactionID" />
+                <ScalarProperty Name="donorID" ColumnName="donorID" />
+                <ScalarProperty Name="receiverID" ColumnName="receiverID" />
+                <ScalarProperty Name="transactionDate" ColumnName="transactionDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

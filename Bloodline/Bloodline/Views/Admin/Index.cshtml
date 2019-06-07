@@ -1,0 +1,263 @@
+﻿
+@{
+    ViewBag.Title = "Admin Dashboard";
+}
+
+<h2 style="margin-bottom: 10px;">Admin Dasboard</h2>
+
+
+<button type="button" class="btn btn-outline-primary" style="margin-bottom: 10px; margin-right: 10px;" onclick="PopupForm('@Url.Action("AddorEdit","Admin")')"><i class="fas fa-plus"></i> Staff</button>
+<button type="button" class="btn btn-outline-success" style="margin-bottom: 10px; margin-right: 10px;" onclick="PopupForm('@Url.Action("AddorEditCamp","Admin")')"><i class="fas fa-plus"></i> Camp</button>
+<button type="button" class="btn btn-outline-warning" style="margin-bottom: 10px; margin-right: 10px;" onclick="PopupForm('@Url.Action("AddorEditBranch","Admin")')"><i class="fas fa-plus"></i> Branch</button>
+
+<hr />
+
+<h3 style="margin-bottom: 10px;">Staff</h3>
+
+<table class="table" id="staffTable" style="margin-bottom: 10px;">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Gender</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+</table>
+
+<hr />
+
+<h3 style="margin-bottom: 10px;">Donation Camps</h3>
+
+<table class="table" id="campTable" style="margin-bottom: 10px;">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Location</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+</table>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+@section scripts {
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $('#staffTable').DataTable({
+                "ajax": {
+                    "url": "/Admin/GetData",
+                    "type": "GET",
+                    "dtatype": "json"
+                },
+                "columns": [
+                    { "data": "staffID" },
+                    { "data": "staffName" },
+                    { "data": "staffDOB" },
+                    { "data": "staffPhone" },
+                    { "data": "staffGender" },
+                    {"data":"staffID" , "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Admin")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"150px"
+                    }
+                ],
+                "language":
+                {
+                    "emptyTable": "No Staff Added. Please add new"
+                }
+            });
+            dataTable1 = $('#campTable').DataTable({
+                "ajax": {
+                    "url": "/Admin/GetCamp",
+                    "type": "GET",
+                    "dtatype": "json"
+                },
+                "columns": [
+                    { "data": "campID" },
+                    { "data": "campName" },
+                    { "data": "campDate" },
+                    { "data": "campLocation" },
+                    {"data":"campID" , "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddorEditCamp","Admin")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=DeleteCamp("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"150px"
+                    }
+                ],
+                "language":
+                {
+                    "emptyTable": "No Camp Added. Please add new"
+                }
+            });
+        });
+
+    function PopupForm(url) {
+        var fomDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                fomDiv.html(response);
+
+                Popup = fomDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: "Add New Staff",
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+                Popup1 = fomDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: "Add New Camp",
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+                Popup2 = fomDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: "Add New Branch",
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+    }
+
+    function SubmitForm(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+            type: "POST",
+            url: form.action,
+            data: $(form).serialize(),
+            success: function (data) {
+                if (data.success) {
+                    Popup.dialog('close');
+                    Popup1.dialog('close');
+                    Popup2.dialog('close');
+                    dataTable.ajax.reload();
+
+                    $.notify(data.message,{
+                        globalPosition :"top center",
+                        className : "success"
+                    })
+                }
+            }
+        });
+        }
+        return false;
+    }
+
+    function AddUser()
+    {
+          $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddUser","Admin")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+    }
+
+    function Delete(id) {
+            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Admin")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+     }
+    function DeleteBranch(id) {
+            if(confirm('Are You Sure to Delete this Branch Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteBranch","Admin")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+            }
+    function Delete(id) {
+            if(confirm('Are You Sure to Delete this Camp Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteCamp","Admin")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+
+
+    </script>
+}

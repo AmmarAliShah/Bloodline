@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8d676aa3dbde4aeb95e33db5ca2da543" Name="Diagram1" ZoomLevel="81">
+        <EntityTypeShape EntityType="bloodlineModel.branch" Width="1.5" PointX="9.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.camp" Width="1.5" PointX="11.5" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.donation" Width="1.5" PointX="6.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.donor" Width="1.5" PointX="4.5" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.login" Width="1.5" PointX="9.5" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.receiver" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.report" Width="1.5" PointX="6.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.shipment" Width="1.5" PointX="11.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.staff" Width="1.5" PointX="11.5" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.sysdiagram" Width="1.5" PointX="13.5" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="bloodlineModel.transaction" Width="1.5" PointX="9" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="bloodlineModel.FK__shipment__branch__2B0A656D" ManuallyRouted="false" />
+        <AssociationConnector Association="bloodlineModel.FK__donation__donorI__2739D489" ManuallyRouted="false" />
+        <AssociationConnector Association="bloodlineModel.FK__receiver__donorI__29221CFB" ManuallyRouted="false" />
+        <AssociationConnector Association="bloodlineModel.FK__report__donorID__2A164134" ManuallyRouted="false" />
+        <AssociationConnector Association="bloodlineModel.FK_transaction_donor" ManuallyRouted="false" />
+        <AssociationConnector Association="bloodlineModel.FK_transaction_receiver" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

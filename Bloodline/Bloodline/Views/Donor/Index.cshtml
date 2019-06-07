@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Donor Dashboard";
+}
+
+<h2>Donor Dasboard</h2>
+
+
+<table class="table" id="staffTable">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Donor ID</th>
+            <th scope="col">Blood Group</th>
+            <th scope="col">Hemoglobin Level</th>
+            <th scope="col">Blood Sugar Level</th>
+            <th scope="col">Red Blood Cells</th>
+            <th scope="col">White Blood Cells</th>
+        </tr>
+    </thead>
+</table>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+@section scripts {
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            var myParam = urlParams.get('id');
+            var id = myParam;
+
+            dataTable = $('#staffTable').DataTable({
+                "ajax": {
+                    "url": "/Donor/GetData",
+                    "type": "GET",
+                    "data": { id: id},
+                    "dataType": "json",
+                },
+                "columns": [
+                    { "data": "reportID" },
+                    { "data": "donorName" },
+                    { "data": "bloodGroup" },
+                    { "data": "hmgLvl" },
+                    { "data": "bsLvl" },
+                    { "data": "rbc" },
+                    { "data": "wbc" }
+                ],
+                "language":
+                {
+                    "emptyTable": "No reports"
+                }
+            });
+        });
+    </script>
+}

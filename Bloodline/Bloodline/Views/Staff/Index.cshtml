@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Staff Dashboard";
+}
+
+<h2 style="margin-bottom: 10px;">Staff Dasboard</h2>
+
+<button type="button" class="btn btn-outline-primary" style="margin-bottom: 10px; margin-right: 10px;" onclick="PopupForm('@Url.Action("AddorEdit","Staff")')"><i class="fas fa-plus"></i> Donor</button>
+<button type="button" class="btn btn-outline-success" style="margin-bottom: 10px; margin-right: 10px;" data-toggle="modal" data-target="#reportModal"><i class="fas fa-plus"></i> Report</button>
+<hr />
+
+<h3 style="margin-bottom: 10px;">Blood Donor</h3>
+
+<table class="table" id="donorTable" style="margin-bottom: 10px;">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Gender</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+</table>
+
+
+<div id="reportModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Donor Report</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Donor Name</label><br />
+                    <select id="donorName" class="" style="border-radius:4px; width:80%; height:35px">
+                        <option value="0">Select a donor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="bloodGroup">Blood Group</label>
+                    <input class="form-control text-box single-line" id="bloodGroup" name="bloodGroup" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="bloodGroup" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="hmg">Hemoglobin Level</label>
+                    <input class="form-control text-box single-line" id="hmg" name="hmg" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="hmg" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="bsl">Blood Sugar Level</label>
+                    <input class="form-control text-box single-line" id="bsl" name="bsl" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="bsl" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="rbc">Red Blood Cells</label>
+                    <input class="form-control text-box single-line" id="rbc" name="rbc" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="rbc" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="wbc">White Blood Celss</label>
+                    <input class="form-control text-box single-line" id="wbc" name="wbc" type="text" value="">
+                    <span class="field-validation-valid" data-valmsg-for="wbc" data-valmsg-replace="true"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" id="btnSaveReport">Save</button>
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<hr />
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+@section scripts {
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        var Popup, dataTable;
+    $(document).ready(function () {
+            dataTable = $('#donorTable').DataTable({
+                "ajax": {
+                    "url": "/Staff/GetData",
+                    "type": "GET",
+                    "dtatype": "json"
+                },
+                "columns": [
+                    { "data": "donorID" },
+                    { "data": "donorName" },
+                    { "data": "donorDOB" },
+                    { "data": "donorPhone" },
+                    { "data": "donorGender" },
+                    { "data": "donorID" , "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Staff")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"150px"
+                    }
+                ],
+                "language":
+                {
+                    "emptyTable": "No Donor Added. Please add new"
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/Staff/GetDonors',
+                success: function (recData) {
+                    if (recData.data != null) {
+                        $('#donorName').append(recData.data);
+                    }
+                    else {
+
+                    }
+
+                },
+                error: function () {
+
+                }
+            });
+
+            $("#btnSaveReport").click(function (e) {
+                var donorId = $('#donorName').val();
+                var bg = $('#bloodGroup').val();
+                var hmg = $('#hmg').val();
+                var bsl = $('#bsl').val();
+                var rbc = $('#rbc').val();
+                var wbc = $('#wbc').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '/Staff/AddReport',
+                    contentType: "application/json",
+                    traditional: true,
+                    data: JSON.stringify({ donorId: donorId, bg: bg, hmg: hmg, bsl: bsl, rbc: rbc, wbc: wbc}),
+                    dataType: "json",
+                    success: function (recData) {
+                        if (recData.status == "success") {
+
+                            alert("Saved");
+
+                        }
+                        else {
+                            alert("Error");
+                        }
+
+                    },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+
+            });
+        });
+    function PopupForm(url) {
+        var fomDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                fomDiv.html(response);
+
+                Popup = fomDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: "Add New Donor",
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+            }
+
+    function SubmitForm(form)
+    {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+            type: "POST",
+            url: form.action,
+            data: $(form).serialize(),
+            success: function (data) {
+                if (data.success) {
+                    Popup.dialog('close');
+                    dataTable.ajax.reload();
+
+                    $.notify(data.message,{
+                        globalPosition :"top center",
+                        className : "success"
+                    })
+                }
+            }
+        });
+        }
+        return false;
+            }
+
+    function Delete(id) {
+            if(confirm('Are You Sure to Delete this Donor Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Staff")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+    </script>
+}
